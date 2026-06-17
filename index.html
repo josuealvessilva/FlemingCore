@@ -1,0 +1,1818 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FlemingCore— Challenge Eurofarma 2026</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..700;1,9..144,400..600&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+    <style>
+        /* ============ TOKENS ============ */
+        :root {
+            --paper: #070A0E;
+            --paper-2: #101722;
+            --ink: #F4F8FF;
+            --ink-soft: #AAB7C6;
+            --line: #263241;
+            --brand: #64C8FF;
+            --brand-soft: #0C2A40;
+            --nav-bg: #03060A;
+            --nav-line: rgba(100, 200, 255, .22);
+            --risk-low: #72E4A2;
+            --risk-low-soft: #102B20;
+            --risk-mid: #FFD166;
+            --risk-mid-soft: #302611;
+            --risk-high: #FF637A;
+            --risk-high-soft: #35131B;
+            --display: 'Fraunces', serif;
+            --body: 'IBM Plex Sans', sans-serif;
+            --mono: 'IBM Plex Mono', monospace;
+            --container: 1180px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: var(--body);
+            background: var(--paper);
+            color: var(--ink);
+            line-height: 1.6;
+            font-size: 16px;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        img,
+        svg {
+            display: block;
+            max-width: 100%;
+        }
+
+        a {
+            color: inherit;
+        }
+
+        .container {
+            max-width: var(--container);
+            margin: 0 auto;
+            padding: 0 1.75rem;
+        }
+
+        .eyebrow {
+            font-family: var(--mono);
+            font-size: .75rem;
+            letter-spacing: .16em;
+            text-transform: uppercase;
+            color: var(--brand);
+            font-weight: 600;
+        }
+
+        h1,
+        h2,
+        h3,
+        h4 {
+            font-family: var(--display);
+            font-weight: 600;
+            letter-spacing: -.01em;
+            color: var(--ink);
+        }
+
+        h2 {
+            font-size: clamp(1.9rem, 4vw, 2.75rem);
+            line-height: 1.15;
+            margin-top: .5rem;
+        }
+
+        h3 {
+            font-size: clamp(1.25rem, 2.4vw, 1.5rem);
+            line-height: 1.3;
+        }
+
+        p {
+            color: var(--ink-soft);
+        }
+
+        .lede {
+            font-size: clamp(1.05rem, 1.6vw, 1.2rem);
+            max-width: 42em;
+            margin-top: 1.1rem;
+        }
+
+        /* ============ BUTTONS ============ */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: .5rem;
+            font-family: var(--mono);
+            font-size: .85rem;
+            letter-spacing: .04em;
+            text-transform: uppercase;
+            font-weight: 600;
+            padding: .85rem 1.6rem;
+            border-radius: 4px;
+            border: 1px solid var(--ink);
+            text-decoration: none;
+            transition: transform .15s ease, background .2s ease, color .2s ease;
+        }
+
+        .btn--solid {
+            background: var(--ink);
+            color: #06111A;
+        }
+
+        .btn--solid:hover {
+            background: var(--brand);
+            border-color: var(--brand);
+            color: #03111A;
+            transform: translateY(-2px);
+        }
+
+        .btn--outline {
+            background: transparent;
+            color: var(--ink);
+        }
+
+        .btn--outline:hover {
+            background: var(--brand);
+            border-color: var(--brand);
+            color: #03111A;
+            transform: translateY(-2px);
+        }
+
+        .btn:focus-visible {
+            outline: 2px solid var(--brand);
+            outline-offset: 3px;
+        }
+
+        /* ============ BARCODE DECORATION ============ */
+        .barcode {
+            height: 30px;
+            width: 92px;
+            background-image: repeating-linear-gradient(90deg,
+                    var(--ink) 0px, var(--ink) 2px,
+                    transparent 2px, transparent 5px,
+                    var(--ink) 5px, var(--ink) 6px,
+                    transparent 6px, transparent 10px,
+                    var(--ink) 10px, var(--ink) 13px,
+                    transparent 13px, transparent 16px,
+                    var(--ink) 16px, var(--ink) 17px,
+                    transparent 17px, transparent 21px,
+                    var(--ink) 21px, var(--ink) 24px,
+                    transparent 24px, transparent 27px);
+            opacity: .85;
+            flex-shrink: 0;
+        }
+
+        .barcode--light {
+            filter: invert(1) brightness(2);
+            opacity: .18;
+        }
+
+        /* ============ HEADER ============ */
+        header {
+            position: sticky;
+            top: 0;
+            z-index: 50;
+            background: rgba(3, 6, 10, .94);
+            backdrop-filter: blur(14px);
+            border-bottom: 1px solid var(--nav-line);
+            box-shadow: 0 18px 40px rgba(0, 0, 0, .28);
+        }
+
+        .nav {
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1.4rem;
+            min-height: 78px;
+            padding: .35rem 0;
+        }
+
+        .logo {
+            display: inline-flex;
+            align-items: center;
+            text-decoration: none;
+            flex: 0 0 auto;
+        }
+
+        .logo img {
+            width: clamp(168px, 18vw, 244px);
+            max-height: 130px;
+            object-fit: contain;
+            filter: drop-shadow(0 0 18px rgba(100, 200, 255, .42));
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: stretch;
+            justify-content: center;
+            gap: 0;
+            margin-left: auto;
+            font-family: var(--mono);
+            font-size: .72rem;
+            letter-spacing: .08em;
+            text-transform: uppercase;
+        }
+
+        .nav-links a {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            min-height: 78px;
+            padding: 0 .82rem;
+            border-left: 1px solid rgba(255, 255, 255, .08);
+            text-decoration: none;
+            color: rgba(244, 248, 255, .78);
+            transition: color .2s ease, background .2s ease;
+            white-space: nowrap;
+        }
+
+        .nav-links a:last-child {
+            border-right: 1px solid rgba(255, 255, 255, .08);
+        }
+
+        .nav-links a::after {
+            content: "";
+            position: absolute;
+            left: .82rem;
+            right: .82rem;
+            bottom: 1.05rem;
+            height: 2px;
+            background: var(--brand);
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform .22s ease;
+        }
+
+        .nav-links a:hover {
+            color: #fff;
+            background: rgba(100, 200, 255, .06);
+        }
+
+        .nav-links a:hover::after {
+            transform: scaleX(1);
+        }
+
+        .nav-access {
+            display: flex;
+            align-items: center;
+            gap: .45rem;
+            font-family: var(--mono);
+            font-size: .68rem;
+            letter-spacing: .08em;
+            text-transform: uppercase;
+        }
+
+        .nav-access a {
+            color: var(--ink);
+            text-decoration: none;
+            border: 1px solid var(--brand);
+            padding: .62rem .78rem;
+            background: rgba(100, 200, 255, .1);
+        }
+
+        .nav-access a:last-child {
+            background: var(--brand);
+            color: #03111A;
+            font-weight: 700;
+        }
+
+        .nav-toggle {
+            position: absolute;
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .nav-menu {
+            display: none;
+            width: 46px;
+            height: 46px;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            gap: 6px;
+            border: 1px solid var(--nav-line);
+            cursor: pointer;
+        }
+
+        .nav-menu span {
+            width: 22px;
+            height: 2px;
+            background: var(--ink);
+            transition: transform .2s ease, opacity .2s ease;
+        }
+
+        @media (max-width:1080px) {
+            .nav-links a {
+                padding: 0 .58rem;
+                font-size: .66rem;
+            }
+
+            .nav-access {
+                display: none;
+            }
+        }
+
+        @media (max-width:880px) {
+            .nav {
+                min-height: 72px;
+            }
+
+            .logo img {
+                width: 178px;
+                max-height: 52px;
+            }
+
+            .nav-menu {
+                display: inline-flex;
+            }
+
+            .nav-links {
+                position: absolute;
+                top: 100%;
+                left: -1.75rem;
+                right: -1.75rem;
+                display: grid;
+                grid-template-columns: 1fr;
+                margin: 0;
+                padding: .5rem 1.75rem 1.2rem;
+                background: rgba(3, 6, 10, .98);
+                border-top: 1px solid var(--nav-line);
+                border-bottom: 1px solid var(--nav-line);
+                transform: scaleY(0);
+                transform-origin: top;
+                opacity: 0;
+                pointer-events: none;
+                transition: transform .2s ease, opacity .2s ease;
+            }
+
+            .nav-links a {
+                min-height: 46px;
+                padding: 0;
+                border-left: none;
+                border-bottom: 1px solid rgba(255, 255, 255, .08);
+            }
+
+            .nav-links a:last-child {
+                border-right: none;
+            }
+
+            .nav-links a::after {
+                left: 0;
+                right: auto;
+                width: 42px;
+                bottom: .65rem;
+            }
+
+            .nav-toggle:checked ~ .nav-links {
+                transform: scaleY(1);
+                opacity: 1;
+                pointer-events: auto;
+            }
+
+            .nav-toggle:checked ~ .nav-menu span:nth-child(1) {
+                transform: translateY(8px) rotate(45deg);
+            }
+
+            .nav-toggle:checked ~ .nav-menu span:nth-child(2) {
+                opacity: 0;
+            }
+
+            .nav-toggle:checked ~ .nav-menu span:nth-child(3) {
+                transform: translateY(-8px) rotate(-45deg);
+            }
+
+        }
+    
+        /* ============ HERO ============ */
+        .hero {
+            padding: 5rem 0 6rem;
+            position: relative;
+            overflow: hidden;
+            background: radial-gradient(circle at 18% 28%, rgba(100, 200, 255, .18), transparent 30%), linear-gradient(135deg, #070A0E 0%, #101722 58%, #08121B 100%);
+        }
+
+        .hero::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background-image: radial-gradient(circle at 1px 1px, var(--line) 1px, transparent 1px);
+            background-size: 28px 28px;
+            opacity: .18;
+            mask-image: linear-gradient(to bottom, transparent, black 10%, black 70%, transparent);
+            pointer-events: none;
+        }
+
+        .hero-grid {
+            position: relative;
+            display: grid;
+            grid-template-columns: 1.05fr .95fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        @media (max-width:960px) {
+            .hero-grid {
+                grid-template-columns: 1fr;
+                gap: 3rem;
+            }
+        }
+
+        .hero h1 {
+            font-size: clamp(2.6rem, 6vw, 4.4rem);
+            line-height: 1.04;
+        }
+
+        .hero h1 em {
+            font-style: italic;
+            color: var(--brand);
+            text-shadow: 0 0 28px rgba(100, 200, 255, .28);
+        }
+
+        .hero-logo {
+            width: min(360px, 82vw);
+            margin-bottom: 1.8rem;
+            filter: drop-shadow(0 0 28px rgba(100, 200, 255, .34));
+        }
+
+        .hero-ctas {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2.4rem;
+            flex-wrap: wrap;
+        }
+
+        .hero-tagrow {
+            display: flex;
+            gap: .6rem;
+            flex-wrap: wrap;
+            margin-top: 2.5rem;
+        }
+
+        .tag {
+            font-family: var(--mono);
+            font-size: .72rem;
+            letter-spacing: .06em;
+            text-transform: uppercase;
+            border: 1px solid rgba(100, 200, 255, .24);
+            border-radius: 999px;
+            padding: .4rem .9rem;
+            color: var(--ink-soft);
+            background: rgba(16, 23, 34, .82);
+        }
+
+        /* ============ LABEL CARD (signature element) ============ */
+        .label-card {
+            background: rgba(16, 23, 34, .92);
+            border: 1px solid rgba(244, 248, 255, .62);
+            border-radius: 8px;
+            padding: 1.6rem 1.6rem 1.8rem;
+            box-shadow: 8px 8px 0 rgba(100, 200, 255, .16);
+            font-family: var(--body);
+            transition: box-shadow .3s ease, border-color .4s ease;
+        }
+
+        .label-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            border-bottom: 1px dashed var(--line);
+            padding-bottom: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .label-lote {
+            font-family: var(--mono);
+            font-size: .75rem;
+            letter-spacing: .1em;
+            text-transform: uppercase;
+            color: var(--ink-soft);
+        }
+
+        .label-lote strong {
+            color: var(--ink);
+            display: block;
+            font-size: .95rem;
+            margin-top: .2rem;
+        }
+
+        .label-med {
+            font-size: 1.4rem;
+            margin-bottom: .3rem;
+            transition: color .4s ease;
+        }
+
+        .label-meta {
+            display: flex;
+            justify-content: space-between;
+            gap: 1rem;
+            font-family: var(--mono);
+            font-size: .78rem;
+            color: var(--ink-soft);
+            margin-bottom: 1.3rem;
+            flex-wrap: wrap;
+        }
+
+        .label-meta strong {
+            color: var(--ink);
+        }
+
+        .gauge-track {
+            position: relative;
+            height: 14px;
+            border-radius: 7px;
+            overflow: hidden;
+            display: flex;
+            border: 1px solid var(--ink);
+        }
+
+        .gauge-zone {
+            height: 100%;
+        }
+
+        .gauge-zone--low {
+            width: 40%;
+            background: var(--risk-low-soft);
+        }
+
+        .gauge-zone--mid {
+            width: 30%;
+            background: var(--risk-mid-soft);
+        }
+
+        .gauge-zone--high {
+            width: 30%;
+            background: var(--risk-high-soft);
+        }
+
+        .gauge-marker {
+            position: absolute;
+            top: -5px;
+            width: 3px;
+            height: 24px;
+            background: var(--ink);
+            border-radius: 2px;
+            transform: translateX(-50%);
+            transition: left 1.1s cubic-bezier(.65, 0, .35, 1);
+        }
+
+        .gauge-readout {
+            display: flex;
+            align-items: baseline;
+            gap: .6rem;
+            margin-top: .9rem;
+        }
+
+        .gauge-score {
+            font-family: var(--mono);
+            font-weight: 600;
+            font-size: 2.4rem;
+            line-height: 1;
+            transition: color .4s ease;
+        }
+
+        .gauge-status {
+            font-family: var(--mono);
+            font-size: .8rem;
+            letter-spacing: .08em;
+            text-transform: uppercase;
+            font-weight: 600;
+            padding: .25rem .6rem;
+            border-radius: 4px;
+            transition: background .4s ease, color .4s ease;
+        }
+
+        .label-rec {
+            margin-top: 1.2rem;
+            padding-top: 1rem;
+            border-top: 1px dashed var(--line);
+            font-size: .92rem;
+            color: var(--ink);
+        }
+
+        .label-rec b {
+            font-family: var(--mono);
+            font-size: .7rem;
+            letter-spacing: .1em;
+            text-transform: uppercase;
+            color: var(--ink-soft);
+            display: block;
+            margin-bottom: .35rem;
+            font-weight: 600;
+        }
+
+        /* risk state colors */
+        .label-card[data-status="critico"] .gauge-marker {
+            left: 82%;
+        }
+
+        .label-card[data-status="critico"] .gauge-score {
+            color: var(--risk-high);
+        }
+
+        .label-card[data-status="critico"] .gauge-status {
+            background: var(--risk-high-soft);
+            color: var(--risk-high);
+        }
+
+        .label-card[data-status="critico"] {
+            border-color: var(--risk-high);
+        }
+
+        .label-card[data-status="moderado"] .gauge-marker {
+            left: 55%;
+        }
+
+        .label-card[data-status="moderado"] .gauge-score {
+            color: var(--risk-mid);
+        }
+
+        .label-card[data-status="moderado"] .gauge-status {
+            background: var(--risk-mid-soft);
+            color: var(--risk-mid);
+        }
+
+        .label-card[data-status="moderado"] {
+            border-color: var(--risk-mid);
+        }
+
+        .label-card[data-status="controlado"] .gauge-marker {
+            left: 18%;
+        }
+
+        .label-card[data-status="controlado"] .gauge-score {
+            color: var(--risk-low);
+        }
+
+        .label-card[data-status="controlado"] .gauge-status {
+            background: var(--risk-low-soft);
+            color: var(--risk-low);
+        }
+
+        .label-card[data-status="controlado"] {
+            border-color: var(--risk-low);
+        }
+
+        .hero-card-wrap {
+            position: relative;
+        }
+
+        .hero-card-caption {
+            font-family: var(--mono);
+            font-size: .72rem;
+            color: var(--ink-soft);
+            text-align: center;
+            margin-top: 1rem;
+            letter-spacing: .04em;
+        }
+
+        .dots {
+            display: flex;
+            gap: .4rem;
+            justify-content: center;
+            margin-top: .7rem;
+        }
+
+        .dot {
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: var(--line);
+            transition: background .3s;
+        }
+
+        .dot.active {
+            background: var(--brand);
+        }
+
+        /* ============ SECTIONS GENERAL ============ */
+        section {
+            padding: 6rem 0;
+        }
+
+        .section-head {
+            max-width: 42em;
+            margin-bottom: 3.5rem;
+        }
+
+        .alt {
+            background: var(--paper-2);
+            border-top: 1px solid var(--line);
+            border-bottom: 1px solid var(--line);
+        }
+
+        /* ============ PROBLEMA ============ */
+        .problema-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1.25rem;
+        }
+
+        @media (max-width:960px) {
+            .problema-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width:560px) {
+            .problema-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .fact-card {
+            background: linear-gradient(180deg, rgba(16, 23, 34, .96), rgba(12, 18, 27, .96));
+            border: 1px solid var(--line);
+            border-radius: 6px;
+            padding: 1.6rem 1.4rem;
+            position: relative;
+        }
+
+        .fact-card::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 1.4rem;
+            right: 1.4rem;
+            height: 2px;
+            background: var(--brand);
+        }
+
+        .fact-num {
+            font-family: var(--mono);
+            font-size: .75rem;
+            color: var(--brand);
+            letter-spacing: .1em;
+            font-weight: 600;
+        }
+
+        .fact-card p {
+            margin-top: .8rem;
+            color: var(--ink);
+            font-size: .96rem;
+        }
+
+        /* ============ DIFERENCIAIS ============ */
+        .dif-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+        }
+
+        @media (max-width:960px) {
+            .dif-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .dif-card {
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            background: linear-gradient(180deg, rgba(16, 23, 34, .98), rgba(10, 16, 25, .98));
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1.2rem;
+            transition: border-color .25s ease, transform .25s ease;
+        }
+
+        .dif-card:hover {
+            border-color: var(--ink);
+            transform: translateY(-4px);
+        }
+
+        .dif-icon {
+            width: 46px;
+            height: 46px;
+            border-radius: 50%;
+            border: 1.5px solid var(--ink);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .dif-icon svg {
+            width: 22px;
+            height: 22px;
+        }
+
+        .dif-card h3 {
+            margin-top: .2rem;
+        }
+
+        .dif-card .tag {
+            align-self: flex-start;
+            margin-top: .4rem;
+        }
+
+        /* mini gauge inside dif card 1 */
+        .mini-gauge .gauge-track {
+            height: 10px;
+            margin-top: .6rem;
+        }
+
+        .mini-gauge .gauge-marker {
+            height: 18px;
+            top: -4px;
+            left: 55%;
+            background: var(--risk-mid);
+        }
+
+        /* ============ COMO FUNCIONA — TIMELINE ============ */
+        .flow {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.4rem 2.4rem;
+        }
+
+        @media (max-width:760px) {
+            .flow {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .flow-step {
+            display: flex;
+            gap: 1.2rem;
+            align-items: flex-start;
+            padding-bottom: 1.4rem;
+            border-bottom: 1px solid var(--line);
+        }
+
+        .flow-step:nth-last-child(-n+1),
+        .flow-step:nth-last-child(-n+2) {
+            border-bottom: none;
+        }
+
+        @media (max-width:760px) {
+            .flow-step:nth-last-child(-n+1) {
+                border-bottom: none;
+            }
+
+            .flow-step {
+                border-bottom: 1px solid var(--line);
+            }
+
+            .flow-step:last-child {
+                border-bottom: none;
+            }
+        }
+
+        .flow-num {
+            font-family: var(--mono);
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--brand);
+            border: 1px solid var(--brand);
+            border-radius: 50%;
+            width: 2.4rem;
+            height: 2.4rem;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .flow-step h4 {
+            font-family: var(--body);
+            font-weight: 600;
+            font-size: 1.02rem;
+            margin-bottom: .25rem;
+        }
+
+        .flow-step p {
+            font-size: .92rem;
+        }
+
+        /* ============ EVA ============ */
+        .eva-grid {
+            display: grid;
+            grid-template-columns: 1.4fr 1fr;
+            gap: 2.5rem;
+            align-items: start;
+        }
+
+        @media (max-width:900px) {
+            .eva-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .chat {
+            border: 1px solid var(--ink);
+            border-radius: 8px;
+            background: var(--paper-2);
+            overflow: hidden;
+        }
+
+        .chat-head {
+            display: flex;
+            align-items: center;
+            gap: .7rem;
+            padding: 1rem 1.3rem;
+            border-bottom: 1px solid var(--line);
+            font-family: var(--mono);
+            font-size: .78rem;
+            letter-spacing: .08em;
+            text-transform: uppercase;
+        }
+
+        .chat-dot {
+            width: 9px;
+            height: 9px;
+            border-radius: 50%;
+            background: var(--brand);
+        }
+
+        .chat-body {
+            padding: 1.4rem;
+            display: flex;
+            flex-direction: column;
+            gap: .9rem;
+            min-height: 240px;
+        }
+
+        .bubble {
+            max-width: 80%;
+            padding: .75rem 1rem;
+            border-radius: 10px;
+            font-size: .92rem;
+            opacity: 0;
+            transform: translateY(8px);
+            transition: opacity .5s ease, transform .5s ease;
+        }
+
+        .bubble.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .bubble--user {
+            align-self: flex-end;
+            background: var(--ink);
+            color: var(--paper-2);
+            border-radius: 10px 10px 2px 10px;
+        }
+
+        .bubble--eva {
+            align-self: flex-start;
+            background: #160d0d;
+            border: 1px solid var(--line);
+            border-radius: 10px 10px 10px 2px;
+        }
+
+        .chat-input {
+            display: flex;
+            gap: .7rem;
+            padding: 1rem 1.3rem;
+            border-top: 1px solid var(--line);
+        }
+
+        .chat-input .field {
+            flex: 1;
+            border: 1px solid var(--line);
+            border-radius: 6px;
+            padding: .6rem .9rem;
+            font-family: var(--body);
+            font-size: .85rem;
+            color: var(--ink-soft);
+            background: #fff;
+        }
+
+        .chat-input .send {
+            font-family: var(--mono);
+            font-size: .75rem;
+            text-transform: uppercase;
+            letter-spacing: .08em;
+            border: 1px solid var(--ink);
+            border-radius: 6px;
+            padding: .6rem 1.1rem;
+            background: var(--ink);
+            color: var(--paper-2);
+        }
+
+        .eva-side h3 {
+            margin-bottom: .6rem;
+        }
+
+        .eva-alerts {
+            display: flex;
+            flex-direction: column;
+            gap: .7rem;
+            margin-top: 1rem;
+        }
+
+        .eva-alert {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border: 1px solid var(--line);
+            border-radius: 6px;
+            padding: .7rem 1rem;
+            background: var(--paper-2);
+            font-size: .88rem;
+        }
+
+        .eva-alert .score {
+            font-family: var(--mono);
+            font-weight: 600;
+        }
+
+        .eva-alert.s-high .score {
+            color: var(--risk-high);
+        }
+
+        .eva-alert.s-mid .score {
+            color: var(--risk-mid);
+        }
+
+        /* ============ STACK ============ */
+        .stack-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.25rem;
+        }
+
+        @media (max-width:900px) {
+            .stack-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width:560px) {
+            .stack-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .stack-card {
+            border: 1px solid var(--line);
+            border-radius: 6px;
+            padding: 1.4rem 1.5rem;
+            background: var(--paper-2);
+        }
+
+        .stack-card h4 {
+            font-family: var(--mono);
+            font-size: .78rem;
+            letter-spacing: .1em;
+            text-transform: uppercase;
+            color: var(--brand);
+            font-weight: 600;
+            margin-bottom: .8rem;
+        }
+
+        .stack-card ul {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: .45rem;
+        }
+
+        .stack-card li {
+            font-size: .92rem;
+            color: var(--ink);
+            padding-left: 1.1rem;
+            position: relative;
+        }
+
+        .stack-card li::before {
+            content: "—";
+            position: absolute;
+            left: 0;
+            color: var(--ink-soft);
+            font-family: var(--mono);
+        }
+
+        /* ============ EQUIPE ============ */
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.25rem;
+        }
+
+        @media (max-width:900px) {
+            .team-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width:560px) {
+            .team-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .team-card {
+            border: 1px solid var(--line);
+            border-radius: 6px;
+            padding: 1.5rem;
+            background: var(--paper-2);
+            display: flex;
+            flex-direction: column;
+            gap: .4rem;
+        }
+
+        .team-card .role {
+            font-family: var(--mono);
+            font-size: .72rem;
+            letter-spacing: .1em;
+            text-transform: uppercase;
+            color: var(--brand);
+            font-weight: 600;
+        }
+
+        .team-card .name {
+            font-family: var(--display);
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+
+        .team-card p {
+            font-size: .88rem;
+            margin-top: .3rem;
+        }
+
+        /* ============ CRONOGRAMA ============ */
+        .timeline {
+            display: flex;
+            flex-direction: column;
+            border-left: 1px solid var(--line);
+            padding-left: 2rem;
+            margin-left: 1rem;
+        }
+
+        .tl-item {
+            position: relative;
+            padding-bottom: 2.4rem;
+        }
+
+        .tl-item:last-child {
+            padding-bottom: 0;
+        }
+
+        .tl-item::before {
+            content: "";
+            position: absolute;
+            left: -2.05rem;
+            top: .35rem;
+            width: 11px;
+            height: 11px;
+            border-radius: 50%;
+            background: var(--paper);
+            border: 2px solid var(--brand);
+        }
+
+        .tl-month {
+            font-family: var(--mono);
+            font-size: .75rem;
+            letter-spacing: .12em;
+            text-transform: uppercase;
+            color: var(--brand);
+            font-weight: 600;
+            margin-bottom: .3rem;
+        }
+
+        .tl-item h4 {
+            font-family: var(--body);
+            font-weight: 600;
+            font-size: 1.02rem;
+            margin-bottom: .3rem;
+        }
+
+        .tl-item p {
+            font-size: .92rem;
+            max-width: 46em;
+        }
+
+        /* ============ CTA / FOOTER ============ */
+        .cta {
+            text-align: center;
+            padding: 5rem 0;
+        }
+
+        .cta h2 {
+            max-width: 30em;
+            margin: 0 auto;
+        }
+
+        .cta p {
+            max-width: 34em;
+            margin: 1.1rem auto 0;
+        }
+
+        .cta .hero-ctas {
+            justify-content: center;
+            margin-top: 2.2rem;
+        }
+
+        footer {
+            border-top: 1px solid var(--nav-line);
+            padding: 3rem 0;
+            background: #03060A;
+            color: var(--paper-2);
+        }
+
+        .foot-grid {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+        }
+
+        .foot-logo {
+            display: inline-flex;
+            align-items: center;
+        }
+
+        .foot-logo img {
+            width: 180px;
+            max-height: 160px;
+            object-fit: contain;
+            filter: drop-shadow(0 0 14px rgba(100, 200, 255, .34));
+        }
+
+        .foot-meta {
+            font-family: var(--mono);
+            font-size: .75rem;
+            letter-spacing: .06em;
+            color: #A9B6AE;
+            text-align: right;
+        }
+
+        .foot-meta a {
+            text-decoration: none;
+            color: #CFE0D6;
+        }
+
+        /* ============ REVEAL ANIM ============ */
+        .reveal {
+            opacity: 0;
+            transform: translateY(18px);
+            transition: opacity .7s ease, transform .7s ease;
+        }
+
+        .reveal.in {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            * {
+                transition: none !important;
+                animation: none !important;
+                scroll-behavior: auto !important;
+            }
+        }
+    </style>
+</head>
+
+<body id="top">
+    <header>
+        <div class="container nav">
+            <input class="nav-toggle" type="checkbox" id="nav-toggle">
+            <a class="logo" href="#top" aria-label="FlemingCore">
+                <img src="fleming/flemingcore-logo-original.png" alt="FlemingCore">
+            </a>
+            <nav class="nav-links" aria-label="Navegacao principal">
+                <a href="#problema">Problema</a>
+                <a href="#diferenciais">Diferenciais</a>
+                <a href="#funciona">Como funciona</a>
+                <a href="#eva">EVA</a>
+                <a href="#stack">Stack</a>
+                
+                <a href="#cronograma">Cronograma</a>
+            </nav>
+            <div class="nav-access" aria-label="Acessos rapidos">
+                <a href="#funciona">Demo</a>
+                <a href="#equipe">Equipe</a>
+            </div>
+            <label class="nav-menu" for="nav-toggle" aria-label="Abrir menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </label>
+        </div>
+    </header>
+    <!-- ============ HERO ============ -->
+    <section class="hero">
+        <div class="container hero-grid">
+            <div>
+                <img class="hero-logo" src="fleming/flemingcore-logo-original.png" alt="FlemingCore">
+                <p class="eyebrow">Challenge Eurofarma · 2026</p>
+                <h1>Nenhum lote vence<br>sem que alguém <em>perceba</em>.</h1>
+                <p class="lede">
+                    O FlemingCore monitora o estoque de farmácias independentes, projeta o vencimento de cada lote
+                    com um score de risco de 0 a 100 e avisa o farmacêutico antes do prejuízo — em tempo real,
+                    com segurança e arquitetura pronta para escalar.
+                </p>
+                <div class="hero-ctas">
+                    <a href="#funciona" class="btn btn--solid">Como funciona</a>
+                    <a href="#stack" class="btn btn--outline">Stack completa</a>
+                </div>
+                <div class="hero-tagrow">
+                    <span class="tag">Projeção diária às 6h</span>
+                    <span class="tag">Alerta proativo</span>
+                    <span class="tag">EVA · Gemini 1.5 Flash</span>
+                    <span class="tag">Tempo real</span>
+                </div>
+            </div>
+            <div class="hero-card-wrap">
+                <div class="label-card" id="heroLabel" data-status="critico">
+                    <div class="label-top">
+                        <div class="label-lote">Lote<strong id="lblLote">L-2291</strong></div>
+                        <div class="barcode" aria-hidden="true"></div>
+                    </div>
+                    <h3 class="label-med" id="lblMed">Dipirona Sódica 500mg</h3>
+                    <div class="label-meta">
+                        <span>Validade em <strong id="lblDias">12 dias</strong></span>
+                        <span><strong id="lblQtd">240</strong> unidades em estoque</span>
+                    </div>
+                    <div class="gauge-track">
+                        <div class="gauge-zone gauge-zone--low"></div>
+                        <div class="gauge-zone gauge-zone--mid"></div>
+                        <div class="gauge-zone gauge-zone--high"></div>
+                        <div class="gauge-marker" id="gaugeMarker"></div>
+                    </div>
+                    <div class="gauge-readout">
+                        <span class="gauge-score" id="gaugeScore">82</span>
+                        <span class="gauge-status" id="gaugeStatus">Crítico</span>
+                    </div>
+                    <div class="label-rec">
+                        <b>Recomendação automática</b>
+                        <span id="lblRec">Considere devolução ao distribuidor — menos de 15 dias para o
+                            vencimento.</span>
+                    </div>
+                </div>
+                <div class="hero-card-caption">Etiqueta digital gerada pela projeção diária · 06h00</div>
+                <div class="dots" id="heroDots">
+                    <span class="dot active"></span><span class="dot"></span><span class="dot"></span>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- ============ PROBLEMA ============ -->
+    <section id="problema" class="alt">
+        <div class="container">
+            <div class="section-head reveal">
+                <p class="eyebrow">O problema</p>
+                <h2>Estoque vencido é prejuízo que ninguém recupera.</h2>
+                <p class="lede">
+                    Farmácias independentes operam com margens apertadas, capital limitado e sistemas que não avisam
+                    nada antes de ser tarde demais. Em entrevistas, farmacêuticos confirmaram:
+                </p>
+            </div>
+            <div class="problema-grid">
+                <div class="fact-card reveal">
+                    <div class="fact-num">01</div>
+                    <p>Já perderam dinheiro com medicamentos que venceram parados na prateleira.</p>
+                </div>
+                <div class="fact-card reveal">
+                    <div class="fact-num">02</div>
+                    <p>Já levaram multa da ANVISA por manter medicamento vencido em estoque.</p>
+                </div>
+                <div class="fact-card reveal">
+                    <div class="fact-num">03</div>
+                    <p>Não têm tempo para controle manual — muitos atuam no caixa ao mesmo tempo.</p>
+                </div>
+                <div class="fact-card reveal">
+                    <div class="fact-num">04</div>
+                    <p>Os sistemas atuais são arcaicos e nunca avisam proativamente sobre o que vai vencer.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- ============ DIFERENCIAIS ============ -->
+    <section id="diferenciais">
+        <div class="container">
+            <div class="section-head reveal">
+                <p class="eyebrow">Diferenciais</p>
+                <h2>Três coisas que nenhum ERP de farmácia independente faz.</h2>
+            </div>
+            <div class="dif-grid">
+                <div class="dif-card reveal">
+                    <div class="dif-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"
+                            stroke-linecap="round">
+                            <path d="M3 17l4-5 4 3 5-7 5 4" />
+                        </svg>
+                    </div>
+                    <h3>Projeção automática com score de risco</h3>
+                    <p>Todo dia às 6h, o sistema analisa os últimos 90 dias de saída de cada lote com média ponderada,
+                        projeta a sobra até o vencimento e calcula um score de 0 a 100 combinando urgência temporal,
+                        proporção de sobra e valor financeiro em risco.</p>
+                    <div class="mini-gauge">
+                        <div class="gauge-track">
+                            <div class="gauge-zone gauge-zone--low"></div>
+                            <div class="gauge-zone gauge-zone--mid"></div>
+                            <div class="gauge-zone gauge-zone--high"></div>
+                            <div class="gauge-marker"></div>
+                        </div>
+                    </div>
+                    <span class="tag">Crítico &gt;70 · Moderado 40–70 · Controlado &lt;40</span>
+                </div>
+                <div class="dif-card reveal">
+                    <div class="dif-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"
+                            stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M18 8a6 6 0 10-12 0c0 7-3 9-3 9h18s-3-2-3-9" />
+                            <path d="M13.73 21a2 2 0 01-3.46 0" />
+                        </svg>
+                    </div>
+                    <h3>Alerta proativo antes do vencimento</h3>
+                    <p>Lote crítico gera, automaticamente, notificação nativa no Windows da farmácia e e-mail via
+                        Gmail API para o farmacêutico e para a farmácia — mesmo com o sistema fechado.</p>
+                    <span class="tag">Firebase Cloud Messaging</span>
+                    <span class="tag" style="margin-top:.5rem;">Gmail API</span>
+                </div>
+                <div class="dif-card reveal">
+                    <div class="dif-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"
+                            stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z" />
+                        </svg>
+                    </div>
+                    <h3>EVA — assistente em linguagem natural</h3>
+                    <p>"O que devo priorizar hoje?" — a EVA responde com base exclusivamente nos dados reais do
+                        estoque da farmácia, via Gemini 1.5 Flash. Nunca inventa informação.</p>
+                    <span class="tag">Gemini 1.5 Flash</span>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- ============ COMO FUNCIONA ============ -->
+    <section id="funciona" class="alt">
+        <div class="container">
+            <div class="section-head reveal">
+                <p class="eyebrow">Como funciona</p>
+                <h2>Do escaneamento ao alerta resolvido.</h2>
+            </div>
+            <div class="flow">
+                <div class="flow-step reveal">
+                    <div class="flow-num">1</div>
+                    <div>
+                        <h4>Login</h4>
+                        <p>O farmacêutico entra com email e senha via Firebase Authentication, isolado por farmácia.</p>
+                    </div>
+                </div>
+                <div class="flow-step reveal">
+                    <div class="flow-num">2</div>
+                    <div>
+                        <h4>Escaneia o código de barras</h4>
+                        <p>Leitor USB já existente na farmácia lê a caixa e o sistema cadastra o lote inteiro em menos
+                            de 30 segundos.</p>
+                    </div>
+                </div>
+                <div class="flow-step reveal">
+                    <div class="flow-num">3</div>
+                    <div>
+                        <h4>Projeção diária às 6h</h4>
+                        <p>Cloud Scheduler dispara a rotina que analisa todos os lotes ativos e calcula a sobra
+                            projetada.</p>
+                    </div>
+                </div>
+                <div class="flow-step reveal">
+                    <div class="flow-num">4</div>
+                    <div>
+                        <h4>Score de risco calculado</h4>
+                        <p>Cada lote recebe um score de 0 a 100 e uma recomendação automática — promoção, devolução ou
+                            monitoramento.</p>
+                    </div>
+                </div>
+                <div class="flow-step reveal">
+                    <div class="flow-num">5</div>
+                    <div>
+                        <h4>Alerta crítico disparado</h4>
+                        <p>Score acima de 70 gera notificação Windows e e-mail automático, em paralelo, via Pub/Sub.</p>
+                    </div>
+                </div>
+                <div class="flow-step reveal">
+                    <div class="flow-num">6</div>
+                    <div>
+                        <h4>Farmacêutico age</h4>
+                        <p>Vê o alerta em vermelho no topo da tela em tempo real, lê a recomendação e age.</p>
+                    </div>
+                </div>
+                <div class="flow-step reveal">
+                    <div class="flow-num">7</div>
+                    <div>
+                        <h4>Tudo fica registrado</h4>
+                        <p>Cada ação entra no histórico de atividades — quem fez, o quê e quando.</p>
+                    </div>
+                </div>
+                <div class="flow-step reveal">
+                    <div class="flow-num">8</div>
+                    <div>
+                        <h4>EVA, a qualquer momento</h4>
+                        <p>O farmacêutico pergunta em linguagem natural e recebe respostas baseadas nos dados reais do
+                            estoque.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- ============ EVA ============ -->
+    <section id="eva">
+        <div class="container eva-grid">
+            <div class="reveal">
+                <p class="eyebrow">EVA em ação</p>
+                <h2 style="margin-bottom:1.5rem;">Pergunte. A EVA responde com o que está no seu estoque.</h2>
+                <div class="chat">
+                    <div class="chat-head"><span class="chat-dot"></span> EVA · Assistente FlemingCore</div>
+                    <div class="chat-body" id="chatBody">
+                        <div class="bubble bubble--user">O que devo priorizar hoje?</div>
+                        <div class="bubble bubble--eva">Você tem <strong>1 lote crítico</strong>: Dipirona Sódica 500mg
+                            (Lote L-2291), score 82,
+                            vence em 12 dias com 240 unidades em estoque. Recomendação: considere devolução ao
+                            distribuidor.
+                            Também há 1 lote moderado vencendo em 25 dias — monitore por enquanto.</div>
+                    </div>
+                    <div class="chat-input">
+                        <div class="field">Pergunte algo sobre o estoque…</div>
+                        <div class="send">Enviar</div>
+                    </div>
+                </div>
+            </div>
+            <div class="eva-side reveal">
+                <p class="eyebrow">Painel de contexto</p>
+                <h3>Alertas críticos</h3>
+                <p>Visível ao lado do chat para o farmacêutico formular perguntas com contexto.</p>
+                <div class="eva-alerts">
+                    <div class="eva-alert s-high"><span>Dipirona Sódica 500mg</span><span class="score">82</span></div>
+                    <div class="eva-alert s-mid"><span>Amoxicilina 500mg</span><span class="score">58</span></div>
+                    <div class="eva-alert s-high"><span>Losartana 50mg</span><span class="score">76</span></div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- ============ STACK ============ -->
+    <section id="stack" class="alt">
+        <div class="container">
+            <div class="section-head reveal">
+                <p class="eyebrow">Stack tecnológica</p>
+                <h2>Arquitetura pronta para escalar para centenas de farmácias.</h2>
+            </div>
+            <div class="stack-grid">
+                <div class="stack-card reveal">
+                    <h4>App</h4>
+                    <ul>
+                        <li>Flutter para Windows</li>
+                    </ul>
+                </div>
+                <div class="stack-card reveal">
+                    <h4>Backend</h4>
+                    <ul>
+                        <li>Firebase Functions em Python</li>
+                        <li>Firebase Authentication</li>
+                        <li>Firebase Cloud Messaging</li>
+                        <li>Firebase Realtime Database</li>
+                    </ul>
+                </div>
+                <div class="stack-card reveal">
+                    <h4>Banco de dados</h4>
+                    <ul>
+                        <li>PostgreSQL no Cloud SQL</li>
+                    </ul>
+                </div>
+                <div class="stack-card reveal">
+                    <h4>Mensageria</h4>
+                    <ul>
+                        <li>Pub/Sub</li>
+                    </ul>
+                </div>
+                <div class="stack-card reveal">
+                    <h4>Segurança</h4>
+                    <ul>
+                        <li>Cloud Armor</li>
+                        <li>VPC</li>
+                    </ul>
+                </div>
+                <div class="stack-card reveal">
+                    <h4>Analytics</h4>
+                    <ul>
+                        <li>BigQuery</li>
+                        <li>Datalake no Cloud Storage</li>
+                    </ul>
+                </div>
+                <div class="stack-card reveal">
+                    <h4>Observabilidade</h4>
+                    <ul>
+                        <li>Prometheus</li>
+                        <li>Grafana</li>
+                    </ul>
+                </div>
+                <div class="stack-card reveal">
+                    <h4>IA</h4>
+                    <ul>
+                        <li>Gemini 1.5 Flash</li>
+                        <li>EVA — assistente virtual</li>
+                    </ul>
+                </div>
+                <div class="stack-card reveal">
+                    <h4>Infraestrutura GCP</h4>
+                    <ul>
+                        <li>Cloud Scheduler</li>
+                        <li>Secret Manager</li>
+                        <li>Cloud Storage</li>
+                        <li>Cloud Monitoring</li>
+                        <li>Cloud Logging</li>
+                    </ul>
+                </div>
+                <div class="stack-card reveal">
+                    <h4>Integração</h4>
+                    <ul>
+                        <li>Gmail API</li>
+                        <li>Mock SAP em Java</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- ============ EQUIPE ============ -->
+    <section id="equipe">
+        <div class="container">
+            <div class="section-head reveal">
+                <p class="eyebrow">Equipe</p>
+                <h2>Sete pessoas, sete responsabilidades claras.</h2>
+            </div>
+            <div class="team-grid">
+                <div class="team-card reveal">
+                    <span class="role">Cloud Operations Engineer</span>
+                    <span class="name">Josué</span>
+                    <p>Infraestrutura GCP e Firebase — VPC, Cloud Armor, Pub/Sub, Realtime Database, Prometheus e
+                        Grafana.</p>
+                </div>
+                <div class="team-card reveal">
+                    <span class="role">Database &amp; Integration Engineer</span>
+                    <span class="name">Rafael</span>
+                    <p>PostgreSQL, schema do banco, BigQuery, mock SAP em Java e Integração da API Gemini.</p>
+                </div>
+                <div class="team-card reveal">
+                    <span class="role">Flutter Developer</span>
+                    <span class="name">Arthur</span>
+                    <p>App desktop para Windows, com tempo real via Firebase Realtime Database.</p>
+                </div>
+                <div class="team-card reveal">
+                    <span class="role">Marketing</span>
+                    <span class="name">Laysla</span>
+                    <p>Marketing, Produção Física do projeto e Firebase Functions em Python — cadastro, alertas, histórico e projeção diária.</p>
+                </div>
+                <div class="team-card reveal">
+                    <span class="role">Designer Gráfico</span>
+                    <span class="name">Samuel</span>
+                    <p>Modelagem 3D, Design e Firebase Functions em Python</p>
+                </div>
+                <div class="team-card reveal">
+                    <span class="role">ML Engineer</span>
+                    <span class="name">Vinicius</span>
+                    <p>Integração da API Gemini e Firebase Functions em Python — Pub/Sub, notificações e integração SAP</p>
+                </div>
+                <div class="team-card reveal">
+                    <span class="role">ML Engineer</span>
+                    <span class="name">Lucas</span>
+                    <p>Integração da API Gemini e testes de qualidade das respostas da EVA.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- ============ CRONOGRAMA ============ -->
+    <section id="cronograma" class="alt">
+        <div class="container">
+            <div class="section-head reveal">
+                <p class="eyebrow">Cronograma</p>
+                <h2>De junho à apresentação para a Eurofarma.</h2>
+            </div>
+            <div class="timeline">
+                <div class="tl-item reveal">
+                    <div class="tl-month">Junho</div>
+                    <h4>Fundação da infraestrutura</h4>
+                    <p>Schema do banco, ambiente GCP/Firebase, VPC, Cloud Armor, Pub/Sub, Realtime Database, Functions
+                        principais, Prometheus e Grafana, BigQuery e telas iniciais do Flutter.</p>
+                </div>
+                <div class="tl-item reveal">
+                    <div class="tl-month">Julho</div>
+                    <h4>Integração e mock SAP</h4>
+                    <p>Telas restantes do Flutter, início do mock SAP em Java, integração da EVA e primeiros testes
+                        ponta a ponta em dev.</p>
+                </div>
+                <div class="tl-item reveal">
+                    <div class="tl-month">Agosto</div>
+                    <h4>Estabilização</h4>
+                    <p>Mock SAP finalizado, ajustes na EVA, dashboards Grafana completos e correção de bugs dos testes
+                        de julho.</p>
+                </div>
+                <div class="tl-item reveal">
+                    <div class="tl-month">Setembro</div>
+                    <h4>Produção</h4>
+                    <p>Banco de produção populado, pipeline BigQuery ativo com dados reais e build de release testado em
+                        máquina Windows limpa.</p>
+                </div>
+                <div class="tl-item reveal">
+                    <div class="tl-month">Outubro</div>
+                    <h4>Ensaios e planos B</h4>
+                    <p>Cinco ensaios completos da demo, planos de contingência para falhas ao vivo e vídeo de backup
+                        gravado.</p>
+                </div>
+                <div class="tl-item reveal">
+                    <div class="tl-month">Novembro</div>
+                    <h4>Apresentação para a Eurofarma</h4>
+                    <p>Demo ao vivo do fluxo completo — do escaneamento ao alerta resolvido pela EVA.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- ============ CTA ============ -->
+    <section class="cta">
+        <div class="container reveal">
+            <p class="eyebrow">FlemingCore</p>
+            <h2>Estoque controlado. Multas evitadas. Prejuízo prevenido.</h2>
+            <p>Uma plataforma, três diferenciais, uma arquitetura pronta para centenas de farmácias.</p>
+            <p>Poderia dedicar alguns minutos para responder ao nosso questionário de avaliação?</p>
+            <div class="hero-ctas">
+                <a href="https://forms.cloud.microsoft/pages/responsepage.aspx?id=4r_bEbiJSUW-EM7DZOWVUY4q7nMoq-5ArBdK-ob2CElUNkZGNkJGREpJME1GMFdESFBQNkNKOVFPTC4u&origin=lprLink&route=shorturl" class="btn btn--solid">Questionário Forms</a>
+                <a href="#top" class="btn btn--outline">Voltar ao Topo</a>
+            </div>
+        </div>
+    </section>
+    <footer>
+        <div class="container foot-grid">
+            <div class="foot-logo"><img src="fleming/flemingcore-logo-original.png" alt="FlemingCore"></div>
+            <div class="foot-meta">
+                Challenge Eurofarma · 2026<br>
+                Plataforma de gestão de estoque para farmácias independentes
+            </div>
+        </div>
+    </footer>
+    <script>
+        // ===== Scroll reveal =====
+        const revealEls = document.querySelectorAll('.reveal');
+        const io = new IntersectionObserver((entries) => {
+            entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
+        }, { threshold: .12 });
+        revealEls.forEach(el => io.observe(el));
+        // ===== Hero label cycling =====
+        const data = [
+            { lote: 'L-2291', med: 'Dipirona Sódica 500mg', dias: '12 dias', qtd: '240', score: 82, status: 'Crítico', rec: 'Considere devolução ao distribuidor — menos de 15 dias para o vencimento.', state: 'critico' },
+            { lote: 'L-1187', med: 'Amoxicilina 500mg', dias: '25 dias', qtd: '180', score: 58, status: 'Moderado', rec: 'Monitore — situação controlada por enquanto.', state: 'moderado' },
+            { lote: 'L-3340', med: 'Paracetamol 750mg', dias: '120 dias', qtd: '90', score: 18, status: 'Controlado', rec: 'Estoque sob controle. Nenhuma ação necessária.', state: 'controlado' }
+        ];
+        let idx = 0;
+        const card = document.getElementById('heroLabel');
+        const els = {
+            lote: document.getElementById('lblLote'),
+            med: document.getElementById('lblMed'),
+            dias: document.getElementById('lblDias'),
+            qtd: document.getElementById('lblQtd'),
+            score: document.getElementById('gaugeScore'),
+            status: document.getElementById('gaugeStatus'),
+            rec: document.getElementById('lblRec'),
+        };
+        const dots = document.querySelectorAll('#heroDots .dot');
+        function applyState(i) {
+            const d = data[i];
+            card.setAttribute('data-status', d.state);
+            els.lote.textContent = d.lote;
+            els.med.textContent = d.med;
+            els.dias.textContent = d.dias;
+            els.qtd.textContent = d.qtd;
+            els.score.textContent = d.score;
+            els.status.textContent = d.status;
+            els.rec.textContent = d.rec;
+            dots.forEach((dot, n) => dot.classList.toggle('active', n === i));
+        }
+        applyState(0);
+        const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        if (!reduceMotion) {
+            setInterval(() => {
+                idx = (idx + 1) % data.length;
+                applyState(idx);
+            }, 4500);
+        }
+        // ===== Chat bubble reveal on scroll =====
+        const bubbles = document.querySelectorAll('.bubble');
+        const chatIo = new IntersectionObserver((entries) => {
+            entries.forEach((e) => {
+                if (e.isIntersecting) {
+                    bubbles.forEach((b, i) => setTimeout(() => b.classList.add('show'), i * 450));
+                    chatIo.disconnect();
+                }
+            });
+        }, { threshold: .4 });
+        chatIo.observe(document.getElementById('chatBody'));
+    </script>
+</body>
+
+</html>  
